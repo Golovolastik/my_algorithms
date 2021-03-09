@@ -5,12 +5,17 @@ import numpy as np
 def spiralsize(size):
 	import numpy as np
 	array = np.zeros((size, size), dtype=int)
-	array[0] = 1
-	array[:, -1] = 1
-	array[-1] = 1
-	array[0+2:, 0] = 1
-	array[0+2, :-1-1] = 1
-	array[0+2:-2, -1-2] = 1
+	flag = True
+	while flag:
+		array[0] = 1
+		array[:, -1] = 1
+		flag = False
+	# array[0] = 1
+	# array[:, -1] = 1
+	# array[-1] = 1
+	# array[0+2:, 0] = 1
+	# array[0+2, :-1-1] = 1
+	# array[0+2:-2, -1-2] = 1
 	return array
 
 print(spiralsize(6))

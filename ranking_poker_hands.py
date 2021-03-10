@@ -4,9 +4,10 @@
 
 class PokerHand(object):
 
-    RESULT = ["Loss", "Tie", "Win"]
+    #RESULT = ["Loss", "Tie", "Win"]
 
     def __init__(self, hand):
+    	# Hand preprocessing
         self.hand = hand.split(" ")
         for pos, card in enumerate(self.hand):
         	if card[0] == "T":
@@ -19,34 +20,59 @@ class PokerHand(object):
         		self.hand[pos] = card.replace("K", "13")
         	elif card[0] == "A":
         		self.hand[pos] = card.replace("A", "14")
-        self.dictionary = {}
-        for x in range(1, 6):
-        	self.dictionary["card{}".format(x)] = self.hand[x-1]
-        self.hand = self.dictionary
-        for card in self.hand:
-        	self.hand[card] = [
-        						int(self.hand[card][:-1]),
-        						self.hand[card][-1]]
-
         
+        # Creating dictionary.
+        self.dictionary = {}
+        self.suit_list = []
+        self.number_list = []
+        for idx in range(5):
+        	self.suit_list.append(self.hand[idx][-1])
+        	self.number_list.append(int(self.hand[idx][:-1]))
+        self.dictionary['suit'] = self.suit_list
+        self.dictionary['numbers'] = self.number_list
+                
     def combination(self):
-    	combination = ""
+    	# Search for combination and score it.
+    	self.combination = ""
+    	self.score = 0
+    	
+    	# Check four of a kind.
+    	for card in range(2, 15):
+    		if self.dictionary['numbers'].count(card) == 4:
+    			self.combination = "Four of a Kind"
+    			self.score = 105 + four
 
-    	return self.hand
+    	# Check full house and three of a kind.
+    	for card in range(2, 15):
+    		if self.dictionary['numbers'].count(card) == 3:
+    			self.combination = "Three of a Kind"
+    			self.score = 45 + card
+
+    	# Check pair and two pairs.
+    	pairs = []
+    	for card in range(2, 15):
+    		if self.dictionary['numbers'].count(card) == 2:
+    			pairs.append(card)
+    		if len(pairs) == 1:
+    			self.combination = "Pair"
+    			self.score = 15 + pairs[0]
+    		elif len(pairs) == 2:
+    			self.combination = "Two Pairs"
+    			self.score = 30+ max(pairs) + min(pairs)
+
+    	# Check full house.
+
+    	return self.combination, self.score
         
     def compare_with(self, other):
         pass
 
-string = "KS 2H 5C JD TD"
-print(string)
+string = "2S KS KS AH AS"
 
 me = PokerHand(string)
 print(me.combination())
 
-test = "2H"
-print(test[0])
+test = {'card1': [13, 'S'], 'card2': [2, 'S'], 'card3': [5, 'S'], 'card4': [11, 'S'], 'card5': [10, 'S']}
+list1 = [2, 3, 4, 4, 5]
+print(list1.count(4))
 
-test = {"card1": "10S"}
-test["card1"] = [int(test["card1"][:-1]), test["card1"][-1]]
-print(test["card1"])
-print(test)

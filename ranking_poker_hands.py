@@ -37,7 +37,7 @@ class PokerHand(object):
         # The difference between the greater and the smallest number in the hand.
         self.dif = max(self.dictionary['numbers']) - min(self.dictionary['numbers']) 
                 
-    def combination(self):
+    def combination_search(self):
     	# Search for combination and score it.
     	self.combination = ""
     	self.score = 0
@@ -53,7 +53,7 @@ class PokerHand(object):
     			self.score = 1
     			return self.combination, self.score
     		elif self.dif == 4 and max(self.rnum) == 1:
-    			self.combination = "Street Flush"
+    			self.combination = "Straight Flush"
     			self.score = 15 - max(self.dictionary['numbers'])  # max score - 9
     			return self.combination, self.score
     		else:
@@ -108,12 +108,12 @@ class PokerHand(object):
     	for card in range(2, 15):
     		if self.dictionary['numbers'].count(card) == 2:
     			pairs.append(card)
-    		if len(pairs) == 1:
+    	if len(pairs) == 1:
     			self.combination = "Pair"
     			self.temp_score1 = 15 - pairs[0]
     			self.score = 78 + self.temp_score1  # max sxore - 91
     			return self.combination, self.score
-    		elif len(pairs) == 2:
+    	elif len(pairs) == 2:
     			self.combination = "Two Pairs"
     			self.temp_score1 = 15 - max(pairs)
     			self.temp_score2 = (15 - min(pairs)) / 100
@@ -121,12 +121,21 @@ class PokerHand(object):
     			return self.combination, self.score
 
     def compare_with(self, other):
-        pass
+        if self.combination_search()[-1] > other.combination_search()[-1]:
+            return "Loss"
+        elif self.combination_search()[-1] < other.combination_search()[-1]:
+            return "Win"
+        else:
+            return "Tie"
 
-string = "2H 2S 4S 3H 6H"
+string = "2S 2H 4H 5S 4C"
+string1 = "AH AC 5H 6H 7S"
 
 me = PokerHand(string)
-print(me.combination())
+opponent = PokerHand(string1)
+print(me.combination_search())
+print(opponent.combination_search())
+print(me.compare_with(opponent))
 
 test = {'card1': [13, 'S'], 'card2': [2, 'S'], 'card3': [5, 'S'], 'card4': [11, 'S'], 'card5': [10, 'S']}
 list1 = [2, 3, 4, 4, 5]

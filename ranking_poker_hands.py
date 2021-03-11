@@ -100,7 +100,7 @@ class PokerHand(object):
     			if self.dictionary['numbers'].count(card) == 3:
     				self.temp_score1 = 15 - card
     				break 
-    		self.score = 53 + self.temp_score1 # max score - 66
+    		self.score = 53 + self.temp_score1  # max score - 66
     		return self.combination, self.score 
 
     	# Check pair and two pairs.
@@ -111,16 +111,14 @@ class PokerHand(object):
     		if len(pairs) == 1:
     			self.combination = "Pair"
     			self.temp_score1 = 15 - pairs[0]
-    			self.score = 78 + self.temp_score1
+    			self.score = 78 + self.temp_score1  # max sxore - 91
     			return self.combination, self.score
     		elif len(pairs) == 2:
     			self.combination = "Two Pairs"
     			self.temp_score1 = 15 - max(pairs)
     			self.temp_score2 = (15 - min(pairs)) / 100
-    			self.score = 66 + self.temp_score1 + self.temp_score2 # max score - 78.**
+    			self.score = 66 + self.temp_score1 + self.temp_score2  # max score - 78.**
     			return self.combination, self.score
-
-    	return f"You have {self.combination}, and have {self.score} score.", self.rsuits, self.rnum
 
     def compare_with(self, other):
         pass

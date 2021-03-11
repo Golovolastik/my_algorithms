@@ -37,13 +37,10 @@ class PokerHand(object):
         # The difference between the greater and the smallest number in the hand.
         self.dif = max(self.dictionary['numbers']) - min(self.dictionary['numbers']) 
                 
-    def combination(self):
+    def combination_search(self):
     	# Search for combination and score it.
     	self.combination = ""
     	self.score = 0
-    	# Additional variables which helps to score some combinations.
-    	self.temp_score1 = 0
-    	self.temp_score2 = 0
 
     	# Start checking from the best combinations.
     	# Check for a royal and street flush, and flush itself.
@@ -54,53 +51,35 @@ class PokerHand(object):
     			return self.combination, self.score
     		elif self.dif == 4 and max(self.rnum) == 1:
     			self.combination = "Street Flush"
-    			self.score = 15 - max(self.dictionary['numbers'])  # max score - 9
+    			self.score = 2
     			return self.combination, self.score
     		else:
     			self.combination = "Flush"
-    			self.temp_score1 = (15 - sorted(self.dictionary['numbers'])[-1]) + \
-    							   (15 - sorted(self.dictionary['numbers'])[-2]) / 100 + \
-    							   (15 - sorted(self.dictionary['numbers'])[-3]) / 1_000 + \
-    							   (15 - sorted(self.dictionary['numbers'])[-4]) / 10_000 + \
-    							   (15 - sorted(self.dictionary['numbers'])[-5]) / 100_000
-    			self.score = 35 + self.temp_score1  # max score - 44.*****
+    			self.score = 5
     			return self.combination, self.score
 
     	# Check four of a kind.
     	if 4 in self.rnum:
     		self.combination = "Four of a Kind"
-    		for card in self.dictionary['numbers']:
-    			if self.dictionary['numbers'].count(card) == 4:
-    				self.score = 24 - card  # max score - 22
-    				break
+    		self.score = 3    				
     		return self.combination, self.score
 
     	# Check full house.
     	if sorted(self.rnum) == [2, 2, 3, 3, 3]:
     		self.combination = "Full House"
-    		for card in self.dictionary['numbers']:
-    			if self.dictionary['numbers'].count(card) == 3:
-    				self.temp_score1 = 15 - card
-    			else:
-    				self.temp_score2 = (15 - card) / 100
-    				break
-    		self.score = 22 + self.temp_score1 + self.temp_score2 # max score - 35.**
+    		self.score = 4
     		return self.combination, self.score
 
     	# Check straight.
     	if self.dif == 4 and max(self.rnum) == 1:
     		self.combination = "Straight"
-    		self.score = 59 - max(self.dictionary['numbers']) # max score - 53
+    		self.score = 6
     		return self.combination, self.score
 
     	# Check three of a kind.
     	if 3 in self.rnum:
     		self.combination = "Three of a Kind"
-    		for card in self.dictionary['numbers']:
-    			if self.dictionary['numbers'].count(card) == 3:
-    				self.temp_score1 = 15 - card
-    				break 
-    		self.score = 53 + self.temp_score1 # max score - 66
+    		self.score = 7
     		return self.combination, self.score 
 
     	# Check pair and two pairs.
@@ -110,25 +89,37 @@ class PokerHand(object):
     			pairs.append(card)
     		if len(pairs) == 1:
     			self.combination = "Pair"
-    			self.temp_score1 = 15 - pairs[0]
-    			self.score = 78 + self.temp_score1
+    			self.score = 9
     			return self.combination, self.score
     		elif len(pairs) == 2:
     			self.combination = "Two Pairs"
-    			self.temp_score1 = 15 - max(pairs)
-    			self.temp_score2 = (15 - min(pairs)) / 100
-    			self.score = 66 + self.temp_score1 + self.temp_score2 # max score - 78.**
+    			self.score = 8
     			return self.combination, self.score
 
-    	return f"You have {self.combination}, and have {self.score} score.", self.rsuits, self.rnum
+    	# Check highest card.
+    	self.combination = "Highest Card"
+    	self.score = 9 + (15 - max(self.dictionary['numbers']))
+    	return self.combination, self.score
 
     def compare_with(self, other):
-        pass
+        if self.combination_search()[-1] > other.combination_search()[-1]:
+        	return "Loss"
+        elif self.combination_search()[-1] < other.combination_search()[-1]:
+        	return "Win"
+        else:
+        	return "Tie"
 
 string = "2H 2S 4S 3H 6H"
+string2 = "2H 2H 2H 4S 6S"
 
 me = PokerHand(string)
-print(me.combination())
+opponent = PokerHand(string2)
+print(me.combination_search())
+print(opponent.combination_search())
+#opponent.combination()
+#print(type(opponent.combination()))
+
+print(me.compare_with(opponent))
 
 test = {'card1': [13, 'S'], 'card2': [2, 'S'], 'card3': [5, 'S'], 'card4': [11, 'S'], 'card5': [10, 'S']}
 list1 = [2, 3, 4, 4, 5]

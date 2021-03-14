@@ -143,7 +143,7 @@ class PokerHand(object):
         else:
             return "Tie"
 
-string = "2H 2C 3S 3H 3D"
+string = "2H 2C 2S 3H 3D"
 string1 = "3D 2H 3H 2C 2D"
 
 me = PokerHand(string)

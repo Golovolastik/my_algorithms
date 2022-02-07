@@ -19,7 +19,7 @@ def battle(player1, player2):
 
 	return output
 
-player1 = [[1, 1], [2, 1], [2, 2], [5, 5]]
-player2 = [[1, 2], [1, 2], [3, 3]]
+player1 = [[2, 1]]
+player2 = [[6, 6]]
 
 print(battle(player1, player2))
